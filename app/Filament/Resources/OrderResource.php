@@ -177,13 +177,6 @@ class OrderResource extends Resource
         return parent::getEloquentQuery()->where('status', '!=', 'dibatalkan');
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [

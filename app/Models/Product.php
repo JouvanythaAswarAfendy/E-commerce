@@ -17,7 +17,7 @@ class Product extends Model
         static::updated(function ($product) {
             // Jika stok berkurang hingga <= 5 dan sebelumnya > 5
             if ($product->wasChanged('stock') && $product->stock <= 5 && $product->getOriginal('stock') > 5) {
-                $admin = \App\Models\User::where('role', 'penjual')->first();
+                $admin = \App\Models\User::query()->where('role', '=', 'penjual', 'and')->first();
                 if ($admin) {
                     try {
                         $admin->notify(new \App\Notifications\LowStockAlert($product->name, $product->stock));

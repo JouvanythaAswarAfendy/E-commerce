@@ -36,7 +36,7 @@ class MidtransController extends Controller
             return response(['message' => 'Invalid signature'], 403);
         }
 
-        $order = Order::where('order_id', $notification->order_id)->first();
+        $order = Order::query()->where('order_id', '=', $notification->order_id, 'and')->first();
 
         if (!$order) {
             return response(['message' => 'Order not found'], 404);
@@ -77,7 +77,7 @@ class MidtransController extends Controller
     public function finish(Request $request)
     {
         $orderId = $request->order_id;
-        $order = Order::where('order_id', $orderId)->first();
+        $order = Order::query()->where('order_id', '=', $orderId, 'and')->first();
 
         if ($order) {
             // Jika status masih pending, ubah ke diproses (karena ini callback sukses)
@@ -103,8 +103,9 @@ class MidtransController extends Controller
         foreach ($order->items as $item) {
             if ($item->size) {
                 // Reduce stock from ProductSize table
-                $productSize = \App\Models\ProductSize::where('product_id', $item->product_id)
-                    ->where('size', $item->size)
+                $productSize = \App\Models\ProductSize::query()
+                    ->where('product_id', '=', $item->product_id, 'and')
+                    ->where('size', '=', $item->size, 'and')
                     ->first();
 
                 if ($productSize) {
@@ -113,7 +114,7 @@ class MidtransController extends Controller
                 }
             } else {
                 // Reduce stock from Products table
-                $product = \App\Models\Product::find($item->product_id);
+                $product = \App\Models\Product::query()->find($item->product_id, ['*']);
                 if ($product) {
                     $product->stock = max(0, $product->stock - $item->quantity);
                     $product->save();

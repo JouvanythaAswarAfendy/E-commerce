@@ -10,19 +10,21 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with('category')->where('stock', '>', 0);
+        $query = Product::query()->with('category')->where('stock', '>', 0, 'and');
 
         // Filter by category
         if ($request->filled('category')) {
             $categoryFilter = $request->category;
             
             // Find category IDs by ID or Name
-            $baseCategoryIds = Category::where('id', $categoryFilter)
+            $baseCategoryIds = Category::query()
+                ->where('id', '=', $categoryFilter, 'and')
                 ->orWhere('name', 'like', $categoryFilter)
                 ->pluck('id');
                 
             // Get all subcategory IDs for those categories
-            $allCategoryIds = Category::whereIn('id', $baseCategoryIds)
+            $allCategoryIds = Category::query()
+                ->whereIn('id', $baseCategoryIds, 'and', false)
                 ->orWhereIn('parent_id', $baseCategoryIds)
                 ->pluck('id');
                 
@@ -52,7 +54,7 @@ class ProductController extends Controller
         };
 
         $products   = $query->paginate(12)->withQueryString();
-        $categories = Category::with('children')->whereNull('parent_id')->orderBy('name')->get();
+        $categories = Category::query()->with('children')->whereNull('parent_id')->orderBy('name')->get();
 
         return view('products.index', compact('products', 'categories'));
     }
@@ -62,9 +64,10 @@ class ProductController extends Controller
         $product = Product::with(['category', 'sizes'])->findOrFail($id);
 
         // Produk terkait (kategori sama, bukan produk ini)
-        $relatedProducts = Product::where('category_id', $product->category_id)
-            ->where('id', '!=', $product->id)
-            ->where('stock', '>', 0)
+        $relatedProducts = Product::query()
+            ->where('category_id', '=', $product->category_id, 'and')
+            ->where('id', '!=', $product->id, 'and')
+            ->where('stock', '>', 0, 'and')
             ->limit(4)
             ->get();
 
@@ -79,7 +82,8 @@ class ProductController extends Controller
             return response()->json(['products' => []]);
         }
 
-        $products = Product::where('name', 'like', '%' . $query . '%')
+        $products = Product::query()
+            ->where('name', 'like', '%' . $query . '%', 'and')
             ->limit(10)
             ->get()
             ->map(function ($product) {

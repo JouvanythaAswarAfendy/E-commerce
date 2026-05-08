@@ -9,8 +9,8 @@ class HomeController extends Controller
     public function index()
     {
         // Ambil 4 produk terbaru yang stoknya ada
-        $featuredProducts = Product::with('category')
-            ->where('stock', '>', 0)
+        $featuredProducts = Product::query()->with('category')
+            ->where('stock', '>', 0, 'and')
             ->latest()
             ->limit(4)
             ->get();

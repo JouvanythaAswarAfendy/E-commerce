@@ -24,8 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule): void {
         $schedule->call(function () {
-            \App\Models\Order::where('status', 'pending')
-                ->where('created_at', '<=', now()->subHours(24))
+            \App\Models\Order::query()
+                ->where('status', '=', 'pending', 'and')
+                ->where('created_at', '<=', now()->subHours(24), 'and')
                 ->update(['status' => 'dibatalkan']);
         })->hourly();
     })->create();

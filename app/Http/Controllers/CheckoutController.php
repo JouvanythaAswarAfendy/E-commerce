@@ -16,7 +16,7 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        $carts = Cart::with(['product.sizes'])->where('user_id', Auth::id())->get();
+        $carts = Cart::query()->with(['product.sizes'])->where('user_id', '=', Auth::id(), 'and')->get();
         
         if ($carts->isEmpty()) {
             return redirect()->route('products.index')->with('error', 'Keranjang belanja Anda kosong.');
@@ -131,7 +131,7 @@ class CheckoutController extends Controller
                     ]
                 ];
             } else {
-                $carts = Cart::with('product.sizes')->where('user_id', $user->id)->get();
+                $carts = Cart::query()->with('product.sizes')->where('user_id', '=', $user->id, 'and')->get();
                 if ($carts->isEmpty()) {
                     return redirect()->route('products.index')->with('error', 'Keranjang belanja Anda kosong.');
                 }
@@ -199,7 +199,7 @@ class CheckoutController extends Controller
                     'email' => $user->email,
                 ],
                 'item_details' => collect($items)->map(function($item) {
-                    $prod = isset($item->product) ? $item->product : Product::find($item->product_id);
+                    $prod = isset($item->product) ? $item->product : Product::query()->find($item->product_id, ['*']);
                     $itemQty = isset($item->qty) ? $item->qty : $item->quantity;
                     $itemPrice = $item->price;
                     return [
@@ -218,7 +218,7 @@ class CheckoutController extends Controller
 
             // Clear Cart if not direct
             if (!$request->has('is_direct')) {
-                Cart::where('user_id', $user->id)->delete();
+                Cart::query()->where('user_id', '=', $user->id, 'and')->delete();
             }
 
             DB::commit();

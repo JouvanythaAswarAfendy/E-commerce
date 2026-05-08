@@ -9,6 +9,6 @@ class NavigationComposer
 {
     public function compose(View $view): void
     {
-        $view->with('categories', Category::with('children')->whereNull('parent_id')->orderBy('name')->get());
+        $view->with('categories', Category::query()->with('children')->whereNull('parent_id')->orderBy('name')->get());
     }
 }

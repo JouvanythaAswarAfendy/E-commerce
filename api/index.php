@@ -7,6 +7,7 @@ if (getenv('VERCEL')) {
         '/tmp/storage/framework/sessions',
         '/tmp/storage/framework/views',
         '/tmp/storage/framework/cache/data',
+        '/tmp/storage/bootstrap/cache',
         '/tmp/storage/logs',
     ];
 
@@ -16,9 +17,14 @@ if (getenv('VERCEL')) {
         }
     }
 
-    // Point Laravel's storage path to /tmp
-    $_ENV['APP_STORAGE_PATH'] = '/tmp/storage';
+    // Ensure we don't use stale local caches
     putenv('APP_STORAGE_PATH=/tmp/storage');
 }
 
-require __DIR__ . '/../public/index.php';
+try {
+    require __DIR__ . '/../public/index.php';
+} catch (\Exception $e) {
+    error_log('Critical Error during bootstrap: ' . $e->getMessage());
+    error_log($e->getTraceAsString());
+    echo 'Internal Server Error';
+}

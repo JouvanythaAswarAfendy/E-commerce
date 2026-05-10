@@ -12,14 +12,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // On Vercel, redirect storage to /tmp (the only writable directory)
+        // On Vercel, ensure compiled views directory exists and is correctly configured
         if (getenv('VERCEL')) {
-            $storagePath = '/tmp/storage';
-
-            $this->app->useStoragePath($storagePath);
-
-            // Ensure compiled views directory exists
-            $viewCompiledPath = $storagePath . '/framework/views';
+            $viewCompiledPath = '/tmp/storage/framework/views';
             if (!is_dir($viewCompiledPath)) {
                 mkdir($viewCompiledPath, 0755, true);
             }

@@ -34,6 +34,23 @@ $app = Application::configure(basePath: dirname(__DIR__))
 // Set storage path for Vercel
 if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     $app->useStoragePath('/tmp/storage');
+    
+    $dirs = [
+        '/tmp/storage/app',
+        '/tmp/storage/app/public',
+        '/tmp/storage/framework',
+        '/tmp/storage/framework/cache',
+        '/tmp/storage/framework/cache/data',
+        '/tmp/storage/framework/sessions',
+        '/tmp/storage/framework/views',
+        '/tmp/storage/logs',
+    ];
+    
+    foreach ($dirs as $dir) {
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+    }
 }
 
 return $app;

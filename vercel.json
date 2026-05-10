@@ -13,9 +13,7 @@
         "LOG_CHANNEL": "stderr",
         "LOG_LEVEL": "error",
         "SESSION_DRIVER": "cookie",
-        "CACHE_STORE": "array",
-        "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
-        "APP_STORAGE_PATH": "/tmp/storage"
+        "CACHE_STORE": "array"
     },
     "routes": [
         {

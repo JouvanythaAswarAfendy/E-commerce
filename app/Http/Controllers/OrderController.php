@@ -8,22 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    public function show($orderId)
+    public function show($order_id)
     {
         // Temukan pesanan berdasarkan order_id string
-        $order = Order::query()->where('order_id', '=', $orderId, 'and')->firstOrFail();
+        $order = Order::query()->where('order_id', '=', $order_id, 'and')->firstOrFail();
         return view('orders.show', compact('order'));
     }
 
-    public function invoice($orderId)
-    {
-        $order = Order::query()->where('order_id', '=', $orderId, 'and')->firstOrFail();
-        return view('orders.invoice', compact('order'));
-    }
 
-    public function pay($orderId)
+    public function pay($order_id)
     {
-        $order = Order::query()->where('order_id', '=', $orderId, 'and')->firstOrFail();
+        $order = Order::query()->where('order_id', '=', $order_id, 'and')->firstOrFail();
         
         // Pastikan hanya bisa bayar jika status pending
         if (strtolower($order->status) !== 'pending') {
@@ -35,9 +30,9 @@ class OrderController extends Controller
         return view('checkout.pay', compact('snapToken', 'order'));
     }
 
-    public function cancel($orderId)
+    public function cancel($order_id)
     {
-        $order = Order::query()->where('order_id', '=', $orderId, 'and')
+        $order = Order::query()->where('order_id', '=', $order_id, 'and')
             ->where('buyer', '=', Auth::id(), 'and')
             ->firstOrFail();
 
@@ -51,9 +46,9 @@ class OrderController extends Controller
         return redirect()->back()->with('success', 'Pesanan berhasil dibatalkan.');
     }
 
-    public function confirmReceived($orderId)
+    public function confirmReceived($order_id)
     {
-        $order = Order::query()->where('order_id', '=', $orderId, 'and')
+        $order = Order::query()->where('order_id', '=', $order_id, 'and')
             ->where('buyer', '=', Auth::id(), 'and')
             ->firstOrFail();
 

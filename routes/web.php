@@ -40,15 +40,14 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Pesanan
-    Route::get('/orders/{orderId}', [OrderController::class, 'show'])
+    Route::get('/orders/{order_id}', [OrderController::class, 'show'])
         ->name('orders.show');
-    Route::get('/orders/{orderId}/invoice', [OrderController::class, 'invoice'])
-        ->name('orders.invoice');
-    Route::get('/orders/{orderId}/pay', [OrderController::class, 'pay'])
+
+    Route::get('/orders/{order_id}/pay', [OrderController::class, 'pay'])
         ->name('orders.pay');
-    Route::post('/orders/{orderId}/cancel', [OrderController::class, 'cancel'])
+    Route::post('/orders/{order_id}/cancel', [OrderController::class, 'cancel'])
         ->name('orders.cancel');
-    Route::post('/orders/{orderId}/confirm-received', [OrderController::class, 'confirmReceived'])
+    Route::post('/orders/{order_id}/confirm-received', [OrderController::class, 'confirmReceived'])
         ->name('orders.confirm_received');
 
 

@@ -101,7 +101,7 @@ class CartController extends Controller
 
     public function destroy($id)
     {
-        Cart::query()->where('user_id', '=', Auth::id(), 'and')->delete($id);
+        Cart::query()->where('user_id', '=', Auth::id(), 'and')->where('id', '=', $id, 'and')->delete();
 
         return redirect()->route('cart.index')->with('success', 'Produk dihapus dari keranjang');
     }

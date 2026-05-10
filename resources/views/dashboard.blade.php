@@ -234,6 +234,7 @@
                                                 </button>
                                             </form>
                                         @endif
+
                                         <a href="{{ route('orders.show', $order->order_id) }}" 
                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-stone-50 border border-stone-100 text-stone-600 hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm group/btn">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">

@@ -23,7 +23,7 @@ class NotificationController extends Controller
 
             // Redirect based on the data in notification
             if (isset($notification->data['order_id'])) {
-                return redirect()->route('orders.show', ['orderId' => $notification->data['order_id']]);
+                return redirect()->route('orders.show', ['order_id' => $notification->data['order_id']]);
             }
         }
 

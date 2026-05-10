@@ -46,6 +46,7 @@
                             <span class="px-5 py-2 rounded-full text-xs font-black border {{ $statusClass }} uppercase tracking-widest shadow-sm">
                                 {{ $statusLabel }}
                             </span>
+
                         </div>
                     </div>
 

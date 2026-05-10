@@ -22,6 +22,18 @@ if (getenv('VERCEL')) {
 }
 
 $app = Application::configure(basePath: dirname(__DIR__))
+    ->withProviders([
+        \Illuminate\Bus\BusServiceProvider::class,
+        \Illuminate\Cache\CacheServiceProvider::class,
+        \Illuminate\Database\DatabaseServiceProvider::class,
+        \Illuminate\Filesystem\FilesystemServiceProvider::class,
+        \Illuminate\Foundation\Providers\FoundationServiceProvider::class,
+        \Illuminate\Pagination\PaginationServiceProvider::class,
+        \Illuminate\Session\SessionServiceProvider::class,
+        \Illuminate\Translation\TranslationServiceProvider::class,
+        \Illuminate\Validation\ValidationServiceProvider::class,
+        \Illuminate\View\ViewServiceProvider::class,
+    ])
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
